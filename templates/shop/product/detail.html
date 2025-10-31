@@ -1,0 +1,72 @@
+<!-- templates/shop/product/detail.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'shop:product_list' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="max-height: 500px; object-fit: contain;">
+            {% else %}
+                <img src="https://via.placeholder.com/500x500?text={{ product.name }}" class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h1 class="display-5" style="color: var(--rehoboth-green);">{{ product.name }}</h1>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 2px;">
+        
+        <div class="mb-4">
+            <span class="badge" style="background-color: var(--rehoboth-green);">{{ product.category }}</span>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="price">GH₵{{ product.price }}</h2>
+        </div>
+
+        <div class="mb-4">
+            <h5>Description</h5>
+            <p class="lead">{{ product.description|linebreaks }}</p>
+        </div>
+
+        <form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="row g-3 align-items-end">
+                <div class="col-auto">
+                    <label for="{{ cart_product_form.quantity.id_for_label }}" class="form-label">Quantity:</label>
+                    {{ cart_product_form.quantity }}
+                </div>
+                <div class="col-auto">
+                    {{ cart_product_form.override }}
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Continue Shopping
+        </a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 style="color: var(--rehoboth-green);">Related Products</h3>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 2px;">
+    </div>
+</div>
+{% endblock %}

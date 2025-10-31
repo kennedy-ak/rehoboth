@@ -1,0 +1,53 @@
+<!-- templates/orders/created.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: var(--rehoboth-green);"></i>
+                </div>
+                <h1 class="display-4 mb-3" style="color: var(--rehoboth-green);">Order Confirmed!</h1>
+                <p class="lead">Thank you for your order.</p>
+                <hr class="my-4" style="border-color: var(--rehoboth-orange); border-width: 2px;">
+                
+                <div class="text-start mt-4">
+                    <h4 style="color: var(--rehoboth-green);">Order Details</h4>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Order Number:</strong></div>
+                        <div class="col-sm-8">#{{ order.id }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Name:</strong></div>
+                        <div class="col-sm-8">{{ order.first_name }} {{ order.last_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Email:</strong></div>
+                        <div class="col-sm-8">{{ order.email }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Delivery Address:</strong></div>
+                        <div class="col-sm-8">
+                            {{ order.address }}<br>
+                            {{ order.city }}, {{ order.postal_code }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <i class="bi bi-info-circle"></i> You will receive a confirmation email at <strong>{{ order.email }}</strong>
+                </div>
+
+                <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg mt-3">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

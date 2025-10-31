@@ -1,0 +1,159 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rehoboth Space{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --rehoboth-green: #1a5842;
+            --rehoboth-orange: #ff8800;
+            --rehoboth-dark: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background-color: var(--rehoboth-green) !important;
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--rehoboth-orange);
+            font-style: italic;
+        }
+        
+        .nav-link {
+            color: white !important;
+            margin: 0 1rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--rehoboth-orange) !important;
+        }
+        
+        .cart-badge {
+            background-color: var(--rehoboth-orange);
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--rehoboth-orange);
+            border-color: var(--rehoboth-orange);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e67700;
+            border-color: #e67700;
+        }
+        
+        .btn-success {
+            background-color: var(--rehoboth-green);
+            border-color: var(--rehoboth-green);
+        }
+        
+        .btn-success:hover {
+            background-color: #144a36;
+            border-color: #144a36;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .price {
+            color: var(--rehoboth-orange);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background-color: var(--rehoboth-green);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        .floral-decoration {
+            color: var(--rehoboth-orange);
+            opacity: 0.2;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'shop:product_list' %}">
+                REHOBOTH <span>space</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product_list' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'bookings:event_list' %}">
+                            <i class="bi bi-calendar-event"></i> Book Event
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cart:cart_detail' %}">
+                            <i class="bi bi-cart3"></i> Cart
+                            {% if cart|length > 0 %}
+                                <span class="cart-badge">{{ cart|length }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2024 Rehoboth Space of Freshness. All rights reserved.</p>
+            <p><i class="bi bi-telephone"></i> +233 55 676 6396 | <i class="bi bi-instagram"></i> @space_of_freshness</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

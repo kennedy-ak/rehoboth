@@ -1,0 +1,132 @@
+<!-- templates/shop/product/list.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-4" style="color: var(--rehoboth-green);">
+            {% if category %}{{ category.name }}{% else %}All Products{% endif %}
+        </h1>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 3px;">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header" style="background-color: var(--rehoboth-green); color: white;">
+                <h5>Categories</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{% url 'shop:product_list' %}" 
+                   class="list-group-item list-group-item-action {% if not category %}active{% endif %}"
+                   style="{% if not category %}background-color: var(--rehoboth-orange); border-color: var(--rehoboth-orange);{% endif %}">
+                    All Products
+                </a>
+                {% for c in categories %}
+                    <a href="{{ c.get_absolute_url }}" 
+                       class="list-group-item list-group-item-action {% if category.slug == c.slug %}active{% endif %}"
+                       style="{% if category.slug == c.slug %}background-color: var(--rehoboth-orange); border-color: var(--rehoboth-orange);{% endif %}">
+                        {{ c.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/300x250?text={{ product.name }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text flex-grow-1">{{ product.description|truncatewords:15 }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <span class="price">GH₵{{ product.price }}</span>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No products available in this category.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if products.has_other_pages %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Product pagination">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Button -->
+                        {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo; Previous</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo; Previous</span>
+                            </li>
+                        {% endif %}
+
+                        <!-- Page Numbers -->
+                        {% for num in products.paginator.page_range %}
+                            {% if products.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link" style="background-color: var(--rehoboth-orange); border-color: var(--rehoboth-orange);">
+                                        {{ num }}
+                                    </span>
+                                </li>
+                            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Next Button -->
+                        {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next &raquo;</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+                <!-- Page Info -->
+                <p class="text-center text-muted">
+                    Page {{ products.number }} of {{ products.paginator.num_pages }}
+                    ({{ products.paginator.count }} product{{ products.paginator.count|pluralize }})
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

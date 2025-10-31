@@ -1,0 +1,101 @@
+<!-- templates/orders/create.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-4" style="color: var(--rehoboth-green);">
+            <i class="bi bi-credit-card"></i> Checkout
+        </h1>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 3px;">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header" style="background-color: var(--rehoboth-green); color: white;">
+                <h5 class="mb-0">Shipping Information</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                        {{ form.address }}
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.postal_code.id_for_label }}" class="form-label">Postal Code</label>
+                            {{ form.postal_code }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">City</label>
+                            {{ form.city }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="bi bi-check-circle"></i> Place Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header" style="background-color: var(--rehoboth-green); color: white;">
+                <h5 class="mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="mb-3">Items in your order:</h6>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{ product.name }} × {{ item.quantity }}</span>
+                            <span>GH₵{{ item.total_price }}</span>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <strong>Total Items:</strong>
+                    <strong>{{ cart|length }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <h5>Total:</h5>
+                    <h5 class="price">GH₵{{ cart.get_total_price }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3" style="background-color: #f8f9fa;">
+            <div class="card-body">
+                <h6><i class="bi bi-shield-check"></i> Secure Checkout</h6>
+                <small class="text-muted">Your information is protected and secure.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

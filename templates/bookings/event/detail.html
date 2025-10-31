@@ -1,0 +1,203 @@
+<!-- templates/bookings/event/detail.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ event.name }} - Book Now{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mb-4">
+        {% if event.image %}
+            <img src="{{ event.image.url }}" class="img-fluid rounded shadow" alt="{{ event.name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/600x400?text={{ event.name }}" class="img-fluid rounded shadow" alt="{{ event.name }}">
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h1 style="color: var(--rehoboth-green);">{{ event.name }}</h1>
+        <p class="text-muted mb-3">
+            <i class="bi bi-tag"></i> {{ event.get_event_type_display }}
+        </p>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 2px;">
+
+        <p class="lead">{{ event.description }}</p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title" style="color: var(--rehoboth-green);">Event Details</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-people text-primary"></i>
+                        <strong>Capacity:</strong> Up to {{ event.capacity }} guests
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-currency-dollar text-primary"></i>
+                        <strong>Price:</strong> <span class="price">GH₵{{ event.price_per_person }}</span> per person
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h2 style="color: var(--rehoboth-green);">Book This Event</h2>
+        <hr style="border-color: var(--rehoboth-orange); border-width: 2px;">
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" id="bookingForm">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name *</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name *</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number *</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger">{{ form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.event_date.id_for_label }}" class="form-label">Event Date *</label>
+                            {{ form.event_date }}
+                            {% if form.event_date.errors %}
+                                <div class="text-danger">{{ form.event_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.event_time.id_for_label }}" class="form-label">Event Time *</label>
+                            {{ form.event_time }}
+                            {% if form.event_time.errors %}
+                                <div class="text-danger">{{ form.event_time.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.number_of_guests.id_for_label }}" class="form-label">Number of Guests *</label>
+                            {{ form.number_of_guests }}
+                            {% if form.number_of_guests.errors %}
+                                <div class="text-danger">{{ form.number_of_guests.errors }}</div>
+                            {% endif %}
+                            <small class="text-muted">Max: {{ event.capacity }}</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.special_requests.id_for_label }}" class="form-label">Special Requests</label>
+                        {{ form.special_requests }}
+                        {% if form.special_requests.errors %}
+                            <div class="text-danger">{{ form.special_requests.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5>Estimated Total</h5>
+                        <p class="mb-0">
+                            <span id="totalPrice" class="price">GH₵0.00</span>
+                            <small class="text-muted d-block">Based on <span id="guestCount">0</span> guest(s) × GH₵{{ event.price_per_person }} per person</small>
+                        </p>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h6><i class="bi bi-credit-card"></i> Payment Information</h6>
+                        <ul class="mb-0 small">
+                            <li>You will be redirected to Paystack to complete your payment securely</li>
+                            <li>Payment is required to confirm your booking</li>
+                            <li>A confirmation SMS will be sent to your phone number after successful payment</li>
+                            <li>Please ensure your phone number is correct to receive SMS notifications</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-credit-card"></i> Proceed to Payment
+                        </button>
+                        <a href="{% url 'bookings:event_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Events
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title" style="color: var(--rehoboth-green);">
+                    <i class="bi bi-shield-check"></i> Secure Payment
+                </h5>
+                <p class="card-text small text-muted">
+                    Your payment is processed securely through Paystack. We accept all major credit and debit cards,
+                    as well as mobile money. You will receive an SMS confirmation after your payment is successful.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set minimum date to today
+    const dateInput = document.getElementById('{{ form.event_date.id_for_label }}');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+
+    // Calculate total price dynamically
+    const guestsInput = document.getElementById('{{ form.number_of_guests.id_for_label }}');
+    const pricePerPerson = {{ event.price_per_person }};
+    const maxCapacity = {{ event.capacity }};
+
+    guestsInput.addEventListener('input', function() {
+        const guests = parseInt(this.value) || 0;
+        const total = guests * pricePerPerson;
+
+        document.getElementById('totalPrice').textContent = 'GH₵' + total.toFixed(2);
+        document.getElementById('guestCount').textContent = guests;
+
+        // Warn if exceeds capacity
+        if (guests > maxCapacity) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+</script>
+{% endblock %}
