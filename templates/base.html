@@ -13,107 +13,221 @@
             --rehoboth-green: #1a5842;
             --rehoboth-orange: #ff8800;
             --rehoboth-dark: #1a1a1a;
+            --rehoboth-light-green: #2a7a56;
         }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            padding-top: 70px;
         }
-        
+
+        /* Enhanced Navigation */
         .navbar {
-            background-color: var(--rehoboth-green) !important;
+            background: linear-gradient(135deg, var(--rehoboth-green) 0%, var(--rehoboth-light-green) 100%) !important;
             padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
-        
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
         .navbar-brand {
             color: white !important;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            transition: transform 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
         .navbar-brand span {
             color: var(--rehoboth-orange);
             font-style: italic;
         }
-        
+
         .nav-link {
             color: white !important;
-            margin: 0 1rem;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
         }
-        
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--rehoboth-orange);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
         .nav-link:hover {
             color: var(--rehoboth-orange) !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
-        
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
         .cart-badge {
             background-color: var(--rehoboth-orange);
             color: white;
             border-radius: 50%;
             padding: 0.25rem 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             margin-left: 0.5rem;
+            animation: pulse 2s infinite;
         }
-        
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
         .btn-primary {
-            background-color: var(--rehoboth-orange);
-            border-color: var(--rehoboth-orange);
+            background: linear-gradient(135deg, var(--rehoboth-orange), #ff9900);
+            border: none;
         }
-        
+
         .btn-primary:hover {
-            background-color: #e67700;
-            border-color: #e67700;
+            background: linear-gradient(135deg, #ff9900, var(--rehoboth-orange));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 136, 0, 0.4);
         }
-        
+
         .btn-success {
-            background-color: var(--rehoboth-green);
-            border-color: var(--rehoboth-green);
+            background: linear-gradient(135deg, var(--rehoboth-green), var(--rehoboth-light-green));
+            border: none;
         }
-        
+
         .btn-success:hover {
-            background-color: #144a36;
-            border-color: #144a36;
+            background: linear-gradient(135deg, var(--rehoboth-light-green), var(--rehoboth-green));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 88, 66, 0.4);
         }
-        
+
+        .btn-outline-light {
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline-light:hover {
+            background: white;
+            color: var(--rehoboth-green);
+            transform: translateY(-3px);
+        }
+
+        /* Enhanced Cards */
         .card {
             border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 15px;
+            overflow: hidden;
         }
-        
+
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
         }
-        
+
         .product-image {
             height: 250px;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
-        
+
+        .card:hover .product-image {
+            transform: scale(1.1);
+        }
+
         .price {
             color: var(--rehoboth-orange);
             font-size: 1.5rem;
             font-weight: bold;
         }
-        
+
+        /* Enhanced Footer */
         .footer {
-            background-color: var(--rehoboth-green);
+            background: linear-gradient(135deg, var(--rehoboth-green) 0%, var(--rehoboth-light-green) 100%);
             color: white;
-            padding: 2rem 0;
+            padding: 3rem 0;
             margin-top: 4rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
         }
-        
-        .floral-decoration {
+
+        .footer a {
             color: var(--rehoboth-orange);
-            opacity: 0.2;
-            font-size: 3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease;
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'shop:product_list' %}">
+            <a class="navbar-brand" href="{% url 'shop:home' %}">
                 REHOBOTH <span>space</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -122,7 +236,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop:product_list' %}">Products</a>
+                        <a class="nav-link" href="{% url 'shop:home' %}">
+                            <i class="bi bi-house-door-fill"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product_list' %}">
+                            <i class="bi bi-grid-fill"></i> Products
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'bookings:event_list' %}">
@@ -142,7 +263,7 @@
         </div>
     </nav>
 
-    <main class="container my-5">
+    <main>
         {% block content %}
         {% endblock %}
     </main>
@@ -155,5 +276,56 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>

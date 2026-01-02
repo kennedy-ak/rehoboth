@@ -4,6 +4,16 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Category, Product
 from cart.forms import CartAddProductForm
 
+def home(request):
+    """Landing page with hero slider and call-to-actions"""
+    categories = Category.objects.all()
+    featured_products = Product.objects.filter(available=True)[:6]  # Show first 6 products as featured
+    
+    return render(request, 'shop/home.html', {
+        'categories': categories,
+        'featured_products': featured_products
+    })
+
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
@@ -38,4 +48,3 @@ def product_detail(request, id, slug):
         'product': product,
         'cart_product_form': cart_product_form
     })
-
