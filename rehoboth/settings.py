@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-545*b3&^&xbntr13-3%fzrox^)3^z-_gvi8p=cm#$#nnt9w_-3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["draggy-unprecipitately-harper.ngrok-free.dev",'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["draggy-unprecipitately-harper.ngrok-free.dev",'localhost', '127.0.0.1', 'lois.digitalrepublic.space']
 
 
 # Application definition
